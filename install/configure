@@ -22,7 +22,7 @@ cat >> /etc/hosts << HOSTS
 127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}
 HOSTS
 
-# Passwords
+# Users
 echo "root:${PASSWORD}" | chpasswd
 useradd -m -G wheel,audio,video,storage,optical -s /bin/zsh "${USERNAME}"
 echo "${USERNAME}:${PASSWORD}" | chpasswd
@@ -30,8 +30,9 @@ echo "${USERNAME}:${PASSWORD}" | chpasswd
 # Sudo
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-# Services (only what's available at base install)
+# Services — available after base install
 systemctl enable NetworkManager
+systemctl enable bluetooth.service
 
 # GRUB
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=LazyOS
