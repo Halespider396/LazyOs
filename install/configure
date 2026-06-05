@@ -32,7 +32,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Services
 systemctl enable NetworkManager
-systemctl enable greetd
+systemctl enable greetd.service
 systemctl enable bluetooth
 
 # GRUB
