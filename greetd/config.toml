@@ -1,15 +1,11 @@
 # ══════════════════════════════════════════════════════════════
 # greetd config — LazyOS
-# Uses hyprlock as the greeter
+# Uses tuigreet as the greeter
 # ══════════════════════════════════════════════════════════════
 
 [terminal]
 vt = 1
 
 [default_session]
-command = "Hyprland"
-user = "greeter"
-
-[initial_session]
-command = "Hyprland"
+command = "tuigreet --time --remember --cmd Hyprland"
 user = "greeter"
