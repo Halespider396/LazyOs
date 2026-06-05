@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$(dirname "$0")/helpers"
 
 step "–" "Deploying LazyOS dotfiles..."
 
@@ -7,8 +6,8 @@ arch-chroot /mnt /bin/bash << CHROOT
 set -euo pipefail
 BUILD_USER="${USERNAME}"
 USER_HOME="/home/\${BUILD_USER}"
-DOTFILES_REPO="https://github.com/Halespider396/lazyos-dotfiles.git"
-DOTFILES_DIR="\$USER_HOME/lazyos-dotfiles"
+DOTFILES_REPO="https://github.com/Halespider396/LazyOs.git"
+DOTFILES_DIR="\$USER_HOME/LazyOs"
 CONFIG_DIR="\$USER_HOME/.config"
 
 sudo -u "\$BUILD_USER" git clone "\$DOTFILES_REPO" "\$DOTFILES_DIR"
@@ -22,6 +21,7 @@ mkdir -p \
   "\$CONFIG_DIR/hyprlock" \
   "\$CONFIG_DIR/hypridle" \
   "\$CONFIG_DIR/hyprpaper" \
+  "\$CONFIG_DIR/hyprshade" \
   "\$CONFIG_DIR/alacritty" \
   "\$CONFIG_DIR/fastfetch" \
   "\$CONFIG_DIR/wlogout" \
@@ -29,55 +29,55 @@ mkdir -p \
   "\$CONFIG_DIR/gtk-4.0"
 
 # Hyprland
-cp "\${DOTFILES_DIR}/hypr/hyprland.lua"          "\$CONFIG_DIR/hypr/"
-cp "\${DOTFILES_DIR}/hypr/UserConfigs/"*.lua      "\$CONFIG_DIR/hypr/UserConfigs/"
+cp "\${DOTFILES_DIR}/hypr/hyprland.lua"              "\$CONFIG_DIR/hypr/"
+cp "\${DOTFILES_DIR}/hypr/UserConfigs/"*.lua          "\$CONFIG_DIR/hypr/UserConfigs/"
 
 # Waybar
-cp "\${DOTFILES_DIR}/waybar/config"              "\$CONFIG_DIR/waybar/"
-cp "\${DOTFILES_DIR}/waybar/style.css"           "\$CONFIG_DIR/waybar/"
+cp "\${DOTFILES_DIR}/waybar/config"                  "\$CONFIG_DIR/waybar/"
+cp "\${DOTFILES_DIR}/waybar/style.css"               "\$CONFIG_DIR/waybar/"
 
 # Wofi
-cp "\${DOTFILES_DIR}/wofi/style.css"             "\$CONFIG_DIR/wofi/"
+cp "\${DOTFILES_DIR}/wofi/style.css"                 "\$CONFIG_DIR/wofi/"
 
 # Swaync
-cp "\${DOTFILES_DIR}/swaync/style.css"           "\$CONFIG_DIR/swaync/"
+cp "\${DOTFILES_DIR}/swaync/style.css"               "\$CONFIG_DIR/swaync/"
 
 # Hypr ecosystem
-cp "\${DOTFILES_DIR}/hyprlock/hyprlock.conf"     "\$CONFIG_DIR/hyprlock/"
-cp "\${DOTFILES_DIR}/hypridle/hypridle.conf"     "\$CONFIG_DIR/hypridle/"
-cp "\${DOTFILES_DIR}/hyprpaper/hyprpaper.conf"   "\$CONFIG_DIR/hyprpaper/"
+cp "\${DOTFILES_DIR}/hyprlock/hyprlock.conf"         "\$CONFIG_DIR/hyprlock/"
+cp "\${DOTFILES_DIR}/hypridle/hypridle.conf"         "\$CONFIG_DIR/hypridle/"
+cp "\${DOTFILES_DIR}/hyprpaper/hyprpaper.conf"       "\$CONFIG_DIR/hyprpaper/"
+cp "\${DOTFILES_DIR}/hyprshade/hyprshade.toml"       "\$CONFIG_DIR/hyprshade/"
 
 # Alacritty
-cp "\${DOTFILES_DIR}/alacritty/alacritty.toml"  "\$CONFIG_DIR/alacritty/"
+cp "\${DOTFILES_DIR}/alacritty/alacritty.toml"       "\$CONFIG_DIR/alacritty/"
 
 # Fastfetch
-cp "\${DOTFILES_DIR}/fastfetch/config.jsonc"     "\$CONFIG_DIR/fastfetch/"
-cp "\${DOTFILES_DIR}/fastfetch/lazyos.txt"       "\$CONFIG_DIR/fastfetch/"
-
-# Hyprshade
-cp "\${DOTFILES_DIR}/hyprshade/hyprshade.toml"      "$CONFIG_DIR/hyprshade/"
+cp "\${DOTFILES_DIR}/fastfetch/config.jsonc"         "\$CONFIG_DIR/fastfetch/"
+cp "\${DOTFILES_DIR}/fastfetch/lazyos.txt"           "\$CONFIG_DIR/fastfetch/"
 
 # Wlogout
-cp "\${DOTFILES_DIR}/wlogout/layout"             "\$CONFIG_DIR/wlogout/"
-cp "\${DOTFILES_DIR}/wlogout/style.css"          "\$CONFIG_DIR/wlogout/"
+cp "\${DOTFILES_DIR}/wlogout/layout"                 "\$CONFIG_DIR/wlogout/"
+cp "\${DOTFILES_DIR}/wlogout/style.css"              "\$CONFIG_DIR/wlogout/"
 
 # GTK
-cp "\${DOTFILES_DIR}/gtk/settings.ini"           "\$CONFIG_DIR/gtk-3.0/"
-cp "\${DOTFILES_DIR}/gtk/settings.ini"           "\$CONFIG_DIR/gtk-4.0/"
+cp "\${DOTFILES_DIR}/gtk/settings.ini"               "\$CONFIG_DIR/gtk-3.0/"
+cp "\${DOTFILES_DIR}/gtk/settings.ini"               "\$CONFIG_DIR/gtk-4.0/"
 
-# lazy command
-sudo cp "\${DOTFILES_DIR}/lazy"                  /usr/local/bin/lazy
-sudo chmod +x /usr/local/bin/lazy
+# lazy + lazyos-update
+cp "\${DOTFILES_DIR}/lazy"                           /usr/local/bin/lazy
+chmod +x /usr/local/bin/lazy
+cp "\${DOTFILES_DIR}/lazyos-update"                  /usr/local/bin/lazyos-update
+chmod +x /usr/local/bin/lazyos-update
 
-# Greetd
-sudo mkdir -p /etc/greetd
-sudo cp "\${DOTFILES_DIR}/greetd/config.toml"    /etc/greetd/config.toml
+# greetd
+mkdir -p /etc/greetd
+cp "\${DOTFILES_DIR}/greetd/config.toml"             /etc/greetd/config.toml
 
 # Zsh
-cp "\${DOTFILES_DIR}/zsh/.zshrc"                 "\$USER_HOME/.zshrc"
+cp "\${DOTFILES_DIR}/zsh/.zshrc"                     "\$USER_HOME/.zshrc"
 
 # Wallpaper
-cp "\${DOTFILES_DIR}/wallpaper/lazyos.png"       "\$CONFIG_DIR/hypr/wallpaper/"
+cp "\${DOTFILES_DIR}/wallpaper/lazyos.png"           "\$CONFIG_DIR/hypr/wallpaper/"
 
 chown -R "\$BUILD_USER":"\$BUILD_USER" "\$CONFIG_DIR" "\$DOTFILES_DIR" "\$USER_HOME/.zshrc"
 

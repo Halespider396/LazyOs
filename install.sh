@@ -10,16 +10,18 @@ INSTALL_DIR="$(cd "$(dirname "$0")/install" && pwd)"
 source "$INSTALL_DIR/helpers"
 
 # ── Run each stage in order ────────────────────────────────────────────────
-bash "$INSTALL_DIR/preflight"
+source "$INSTALL_DIR/preflight"
 source "$INSTALL_DIR/user-input"
-bash "$INSTALL_DIR/disk-setup"
-bash "$INSTALL_DIR/base-install"
+source "$INSTALL_DIR/disk-setup"
+source "$INSTALL_DIR/base-install"
 
 # Copy package lists into the new root so chroot scripts can read them
-cp "$INSTALL_DIR/packages/base.packages" /mnt/tmp/lazyos-base.packages
-cp "$INSTALL_DIR/packages/aur.packages"  /mnt/tmp/lazyos-aur.packages
+mkdir -p /mnt/tmp
+# Strip comments and empty lines from package lists
+grep -v '^\s*#' "$INSTALL_DIR/packages/base.packages" | grep -v '^\s*$' > /mnt/tmp/lazyos-base.packages
+grep -v '^\s*#' "$INSTALL_DIR/packages/aur.packages"  | grep -v '^\s*$' > /mnt/tmp/lazyos-aur.packages
 
-bash "$INSTALL_DIR/configure"
-bash "$INSTALL_DIR/packages-install"
-bash "$INSTALL_DIR/dotfiles"
-bash "$INSTALL_DIR/finalize"
+source "$INSTALL_DIR/configure"
+source "$INSTALL_DIR/packages-install"
+source "$INSTALL_DIR/dotfiles"
+source "$INSTALL_DIR/finalize"

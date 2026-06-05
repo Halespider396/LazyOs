@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$(dirname "$0")/helpers"
 
 step "6/6" "Configuring system (chroot)..."
 
@@ -17,11 +16,11 @@ echo "LANG=${LOCALE}" > /etc/locale.conf
 
 # Hostname
 echo "${HOSTNAME}" > /etc/hostname
-cat >> /etc/hosts << EOF
+cat >> /etc/hosts << HOSTS
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}
-EOF
+HOSTS
 
 # Passwords
 echo "root:${PASSWORD}" | chpasswd

@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$(dirname "$0")/helpers"
 
 step "–" "Cleaning up..."
 
@@ -18,8 +17,8 @@ echo -e "${GREEN}║   Log in as: ${CYAN}${USERNAME}${GREEN}                    
 echo -e "${GREEN}╚══════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${YELLOW}  GPU Drivers — install after reboot:${NC}"
-echo -e "  AMD   → sudo lazy -S mesa vulkan-radeon"
-echo -e "  Intel → sudo lazy -S mesa vulkan-intel"
+echo -e "  AMD    → sudo lazy -S mesa vulkan-radeon"
+echo -e "  Intel  → sudo lazy -S mesa vulkan-intel"
 echo -e "  NVIDIA → you know what you did 😉"
 echo -e "           wiki.archlinux.org/title/NVIDIA"
 echo ""
