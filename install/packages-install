@@ -22,6 +22,10 @@ command -v yay &>/dev/null || { echo "yay not found!"; exit 1; }
 # ── AUR packages ──────────────────────────────────────────────────────────
 sudo -u "\$BUILD_USER" yay -S --noconfirm --needed \$(cat /tmp/lazyos-aur.packages)
 
+# ── Enable services ──────────────────────────────────────────────────────
+systemctl enable greetd.service
+systemctl enable bluetooth.service
+
 echo "Packages installed."
 CHROOT
 

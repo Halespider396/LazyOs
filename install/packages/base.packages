@@ -46,7 +46,6 @@ libinput
 
 # ── Display manager ────────────────────────────────────────────
 greetd
-greetd-tuigreet
 
 # ── File manager ───────────────────────────────────────────────
 thunar

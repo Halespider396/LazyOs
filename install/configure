@@ -30,10 +30,8 @@ echo "${USERNAME}:${PASSWORD}" | chpasswd
 # Sudo
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-# Services
+# Services (only what's available at base install)
 systemctl enable NetworkManager
-systemctl enable greetd.service
-systemctl enable bluetooth
 
 # GRUB
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=LazyOS
