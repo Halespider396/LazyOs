@@ -1,0 +1,45 @@
+/* ══════════════════════════════════════════════════════════════
+   LazyOS wlogout — Blue Palette
+   ══════════════════════════════════════════════════════════════ */
+
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 14px;
+  background: transparent;
+}
+
+window {
+  background: rgba(10, 22, 40, 0.92);
+}
+
+button {
+  background: rgba(26, 58, 92, 0.6);
+  border: 1px solid rgba(122, 179, 212, 0.2);
+  border-radius: 14px;
+  color: #b8d4e8;
+  margin: 10px;
+  padding: 20px;
+  transition: all 0.2s ease;
+  background-repeat: no-repeat;
+  background-position: center top 30px;
+  background-size: 64px;
+}
+
+button:hover {
+  background-color: rgba(122, 179, 212, 0.2);
+  border-color: rgba(122, 179, 212, 0.5);
+  color: #e8f4ff;
+}
+
+button:focus {
+  background-color: rgba(122, 179, 212, 0.25);
+  border-color: #7ab3d4;
+  color: #e8f4ff;
+}
+
+#lock     { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout   { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend  { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate{ background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot   { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

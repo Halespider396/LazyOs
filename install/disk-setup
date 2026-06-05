@@ -1,0 +1,45 @@
+#!/bin/bash
+source "$(dirname "$0")/helpers"
+
+step "1/6" "Partitioning disk: $DISK"
+
+wipefs -af "$DISK"
+sgdisk --zap-all "$DISK"
+
+sgdisk -n 1:0:+512M  -t 1:ef00 -c 1:"EFI"  "$DISK"
+sgdisk -n 2:0:+${SWAP_GB}G -t 2:8200 -c 2:"swap" "$DISK"
+sgdisk -n 3:0:0      -t 3:8300 -c 3:"root" "$DISK"
+
+# Resolve partition names (nvme/mmcblk use p1/p2/p3)
+if [[ "$DISK" == *"nvme"* ]] || [[ "$DISK" == *"mmcblk"* ]]; then
+  EFI_PART="${DISK}p1"
+  SWAP_PART="${DISK}p2"
+  ROOT_PART="${DISK}p3"
+else
+  EFI_PART="${DISK}1"
+  SWAP_PART="${DISK}2"
+  ROOT_PART="${DISK}3"
+fi
+
+ok "Partitions created: EFI=$EFI_PART SWAP=$SWAP_PART ROOT=$ROOT_PART"
+
+step "2/6" "Formatting partitions..."
+
+mkfs.fat -F32 "$EFI_PART"
+ok "EFI formatted (FAT32)"
+
+mkswap "$SWAP_PART"
+swapon "$SWAP_PART"
+ok "Swap formatted and enabled"
+
+mkfs.ext4 -F "$ROOT_PART"
+ok "Root formatted (ext4)"
+
+step "3/6" "Mounting filesystems..."
+
+mount "$ROOT_PART" /mnt
+mkdir -p /mnt/boot/efi
+mount "$EFI_PART" /mnt/boot/efi
+ok "Filesystems mounted"
+
+export EFI_PART SWAP_PART ROOT_PART

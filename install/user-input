@@ -1,0 +1,68 @@
+#!/bin/bash
+source "$(dirname "$0")/helpers"
+
+echo ""
+echo -e "${CYAN}══ Configuration ══════════════════════════════════════════${NC}"
+echo ""
+
+# Username
+while true; do
+  read -rp " Username: " USERNAME
+  [[ "$USERNAME" =~ ^[a-z_][a-z0-9_-]*$ ]] && break
+  echo -e " ${RED}Invalid username.${NC} Use lowercase letters, numbers, _ or -"
+done
+
+# Password
+while true; do
+  read -rsp " Password: " PASSWORD; echo ""
+  read -rsp " Confirm password: " PASSWORD2; echo ""
+  [ "$PASSWORD" = "$PASSWORD2" ] && break
+  echo -e " ${RED}Passwords don't match.${NC} Try again."
+done
+
+# Hostname
+read -rp " Hostname [lazyos]: " HOSTNAME
+HOSTNAME="${HOSTNAME:-lazyos}"
+
+# Timezone
+read -rp " Timezone [Europe/Bucharest]: " TIMEZONE
+TIMEZONE="${TIMEZONE:-Europe/Bucharest}"
+
+# Locale
+read -rp " Locale [en_US.UTF-8]: " LOCALE
+LOCALE="${LOCALE:-en_US.UTF-8}"
+
+# Swap size
+read -rp " Swap size in GB [4]: " SWAP_GB
+SWAP_GB="${SWAP_GB:-4}"
+
+echo ""
+echo -e "${CYAN}══ Disk Selection ══════════════════════════════════════════${NC}"
+echo ""
+lsblk -d -o NAME,SIZE,TYPE,MODEL | grep disk
+echo ""
+
+while true; do
+  read -rp " Select disk (e.g. sda, nvme0n1): " DISK_NAME
+  DISK="/dev/${DISK_NAME}"
+  [ -b "$DISK" ] && break
+  echo -e " ${RED}Disk not found:${NC} $DISK"
+done
+
+# Summary + confirm
+echo ""
+echo -e "${YELLOW}══ Summary ═════════════════════════════════════════════════${NC}"
+echo -e " Disk       : ${RED}$DISK${NC} ${RED}(ALL DATA WILL BE ERASED)${NC}"
+echo -e " User       : $USERNAME"
+echo -e " Hostname   : $HOSTNAME"
+echo -e " Timezone   : $TIMEZONE"
+echo -e " Locale     : $LOCALE"
+echo -e " Swap       : ${SWAP_GB}GB"
+echo -e " Filesystem : ext4"
+echo -e " Bootloader : GRUB (UEFI)"
+echo ""
+read -rp " Proceed? Type YES to confirm: " CONFIRM
+[ "$CONFIRM" = "YES" ] || die "Aborted by user."
+
+# Export all vars for use by other scripts
+export USERNAME PASSWORD HOSTNAME TIMEZONE LOCALE SWAP_GB DISK

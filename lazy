@@ -1,0 +1,135 @@
+#!/bin/bash
+# ══════════════════════════════════════════════════════════════
+# lazy — LazyOS unified package manager
+# Combines pacman + AUR (yay) into one command
+# ══════════════════════════════════════════════════════════════
+
+# ── Colors ─────────────────────────────────────────────────────
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+# ── Helpers ────────────────────────────────────────────────────
+info()    { echo -e "${CYAN}[lazy]${NC} $1"; }
+ok()      { echo -e "${GREEN}[lazy]${NC} $1"; }
+err()     { echo -e "${RED}[lazy]${NC} $1"; exit 1; }
+warn()    { echo -e "${YELLOW}[lazy]${NC} $1"; }
+
+# ── Check yay is available ─────────────────────────────────────
+check_yay() {
+  command -v yay &>/dev/null || err "yay is not installed. Install it first: sudo pacman -S yay"
+}
+
+# ── Usage ──────────────────────────────────────────────────────
+usage() {
+  echo ""
+  echo -e "  ${CYAN}lazy${NC} — LazyOS unified package manager"
+  echo ""
+  echo -e "  ${YELLOW}Usage:${NC}"
+  echo -e "    sudo lazy -S  <package>   Install a package (pacman first, then AUR)"
+  echo -e "    sudo lazy -R  <package>   Remove a package"
+  echo -e "    sudo lazy -Syu            Update all packages (pacman + AUR)"
+  echo -e "    sudo lazy -Sc             Clean package cache"
+  echo -e "         lazy -Ss <query>     Search both pacman and AUR"
+  echo -e "         lazy -Qs <query>     Search installed packages"
+  echo -e "         lazy -Qi <package>   Show package info"
+  echo -e "         lazy -Cu             Check for available updates"
+  echo -e "         lazy -h              Show this help"
+  echo ""
+}
+
+# ── Commands ───────────────────────────────────────────────────
+case "$1" in
+
+  -S)
+    [ -z "$2" ] && err "Usage: sudo lazy -S <package>"
+    [ "$EUID" -ne 0 ] && err "Run with sudo: sudo lazy -S $2"
+    check_yay
+    info "Looking for '$2' in pacman..."
+    if pacman -Si "$2" &>/dev/null; then
+      info "Found in pacman. Installing..."
+      pacman -S --noconfirm "$2" && ok "'$2' installed from pacman." || err "pacman install failed."
+    else
+      warn "Not found in pacman. Trying AUR..."
+      sudo -u "$SUDO_USER" yay -S --noconfirm "$2" && ok "'$2' installed from AUR." || err "AUR install failed."
+    fi
+    ;;
+
+  -R)
+    [ -z "$2" ] && err "Usage: sudo lazy -R <package>"
+    [ "$EUID" -ne 0 ] && err "Run with sudo: sudo lazy -R $2"
+    info "Removing '$2'..."
+    pacman -R --noconfirm "$2" && ok "'$2' removed." || err "Remove failed."
+    ;;
+
+  -Syu)
+    [ "$EUID" -ne 0 ] && err "Run with sudo: sudo lazy -Syu"
+    info "Running full LazyOS system update..."
+    lazyos-update
+    ;;
+
+  -Sc)
+    [ "$EUID" -ne 0 ] && err "Run with sudo: sudo lazy -Sc"
+    info "Cleaning pacman cache..."
+    pacman -Sc --noconfirm
+    info "Cleaning AUR cache..."
+    sudo -u "$SUDO_USER" yay -Sc --noconfirm
+    info "Removing orphaned packages..."
+    ORPHANS=$(pacman -Qdtq)
+    if [ -n "$ORPHANS" ]; then
+      pacman -Rns --noconfirm $ORPHANS && ok "Orphans removed."
+    else
+      ok "No orphaned packages found."
+    fi
+    ok "Cache cleaned."
+    ;;
+
+  -Ss)
+    [ -z "$2" ] && err "Usage: lazy -Ss <query>"
+    check_yay
+    info "Searching pacman for '$2'..."
+    pacman -Ss "$2"
+    info "Searching AUR for '$2'..."
+    sudo -u "$SUDO_USER" yay -Ss "$2" --aur
+    ;;
+
+  -Qs)
+    [ -z "$2" ] && err "Usage: lazy -Qs <query>"
+    info "Searching installed packages for '$2'..."
+    pacman -Qs "$2" || warn "No installed packages match '$2'."
+    ;;
+
+  -Qi)
+    [ -z "$2" ] && err "Usage: lazy -Qi <package>"
+    pacman -Qi "$2" 2>/dev/null || sudo -u "$SUDO_USER" yay -Qi "$2"
+    ;;
+
+  -Cu)
+    check_yay
+    info "Checking for pacman updates..."
+    PACMAN_UPDATES=$(checkupdates 2>/dev/null | wc -l)
+    info "Checking for AUR updates..."
+    AUR_UPDATES=$(sudo -u "$SUDO_USER" yay -Qua 2>/dev/null | wc -l)
+    echo ""
+    echo -e "  ${CYAN}pacman${NC}  — ${PACMAN_UPDATES} update(s) available"
+    echo -e "  ${CYAN}AUR${NC}     — ${AUR_UPDATES} update(s) available"
+    echo ""
+    TOTAL=$((PACMAN_UPDATES + AUR_UPDATES))
+    if [ "$TOTAL" -gt 0 ]; then
+      warn "Run 'sudo lazy -Syu' to update."
+    else
+      ok "System is up to date."
+    fi
+    ;;
+
+  -h|--help|"")
+    usage
+    ;;
+
+  *)
+    err "Unknown option '$1'. Run 'lazy -h' for help."
+    ;;
+
+esac

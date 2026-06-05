@@ -1,0 +1,58 @@
+/* ══════════════════════════════════════════════════════════════
+   LazyOS Wofi — Nordic Palette
+   ══════════════════════════════════════════════════════════════ */
+
+window {
+  background: rgba(26, 30, 46, 0.95);
+  border: 1px solid rgba(59, 66, 97, 0.8);
+  border-radius: 12px;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 14px;
+}
+
+#input {
+  background: rgba(30, 34, 53, 0.9);
+  border: 1px solid rgba(122, 162, 247, 0.3);
+  border-radius: 8px;
+  color: #c0caf5;
+  padding: 10px 14px;
+  margin: 10px;
+  outline: none;
+}
+
+#input:focus {
+  border-color: rgba(122, 162, 247, 0.7);
+}
+
+#inner-box {
+  margin: 0 10px 10px 10px;
+}
+
+#outer-box {
+  padding: 4px;
+}
+
+#entry {
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #a9b1d6;
+  transition: all 0.15s ease;
+}
+
+#entry:selected {
+  background: rgba(122, 162, 247, 0.18);
+  color: #c0caf5;
+  border: 1px solid rgba(122, 162, 247, 0.3);
+}
+
+#entry:hover {
+  background: rgba(59, 66, 97, 0.5);
+}
+
+#text {
+  margin-left: 6px;
+}
+
+#img {
+  border-radius: 4px;
+}

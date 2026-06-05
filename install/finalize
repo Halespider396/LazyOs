@@ -1,0 +1,25 @@
+#!/bin/bash
+source "$(dirname "$0")/helpers"
+
+step "–" "Cleaning up..."
+
+umount -R /mnt
+swapoff "$SWAP_PART"
+ok "Unmounted all filesystems"
+
+echo ""
+echo -e "${GREEN}╔══════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║   LazyOS installation complete! 🎉               ║${NC}"
+echo -e "${GREEN}║                                                  ║${NC}"
+echo -e "${GREEN}║   Remove the USB and reboot:                     ║${NC}"
+echo -e "${GREEN}║     reboot                                       ║${NC}"
+echo -e "${GREEN}║                                                  ║${NC}"
+echo -e "${GREEN}║   Log in as: ${CYAN}${USERNAME}${GREEN}                          ║${NC}"
+echo -e "${GREEN}╚══════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "${YELLOW}  GPU Drivers — install after reboot:${NC}"
+echo -e "  AMD   → sudo lazy -S mesa vulkan-radeon"
+echo -e "  Intel → sudo lazy -S mesa vulkan-intel"
+echo -e "  NVIDIA → you know what you did 😉"
+echo -e "           wiki.archlinux.org/title/NVIDIA"
+echo ""

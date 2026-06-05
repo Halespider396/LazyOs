@@ -1,0 +1,117 @@
+/* ══════════════════════════════════════════════════════════════
+   LazyOS Waybar — Blue Palette
+   bg:        #0a1628
+   mid:       #1a3a5c
+   accent:    #7ab3d4
+   highlight: #b8d4e8
+   ══════════════════════════════════════════════════════════════ */
+
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 13px;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: rgba(10, 22, 40, 0.85);
+  border: 1px solid rgba(122, 179, 212, 0.2);
+  border-radius: 12px;
+  color: #b8d4e8;
+}
+
+/* ── Workspaces ─────────────────────────────────────────── */
+#workspaces {
+  background: rgba(26, 58, 92, 0.6);
+  border-radius: 10px;
+  padding: 2px 6px;
+  margin: 4px 0;
+}
+
+#workspaces button {
+  color: rgba(184, 212, 232, 0.5);
+  padding: 0 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+  color: #b8d4e8;
+  background: rgba(122, 179, 212, 0.15);
+}
+
+#workspaces button.active {
+  color: #7ab3d4;
+  background: rgba(122, 179, 212, 0.2);
+}
+
+#workspaces button.urgent {
+  color: #e8f4ff;
+  background: rgba(122, 179, 212, 0.35);
+}
+
+/* ── Window title ───────────────────────────────────────── */
+#window {
+  color: rgba(184, 212, 232, 0.7);
+  padding: 0 10px;
+  font-style: italic;
+}
+
+/* ── Clock ──────────────────────────────────────────────── */
+#clock {
+  color: #e8f4ff;
+  background: rgba(26, 58, 92, 0.6);
+  border-radius: 10px;
+  padding: 2px 14px;
+  margin: 4px 0;
+  font-weight: bold;
+}
+
+/* ── Shared module style ────────────────────────────────── */
+#pulseaudio,
+#network,
+#bluetooth,
+#battery,
+#tray,
+#custom-notification {
+  color: #b8d4e8;
+  background: rgba(26, 58, 92, 0.6);
+  border-radius: 10px;
+  padding: 2px 10px;
+  margin: 4px 2px;
+}
+
+#pulseaudio:hover,
+#network:hover,
+#battery:hover {
+  background: rgba(122, 179, 212, 0.15);
+}
+
+/* ── Battery states ─────────────────────────────────────── */
+#battery.warning {
+  color: #f0c060;
+}
+
+#battery.critical {
+  color: #e06060;
+  animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+  to { color: #e8f4ff; }
+}
+
+/* ── Notification bell ──────────────────────────────────── */
+#custom-notification {
+  color: #7ab3d4;
+}
+
+/* ── Tray ───────────────────────────────────────────────── */
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}

@@ -1,0 +1,47 @@
+#!/bin/bash
+source "$(dirname "$0")/helpers"
+
+clear
+
+echo -e "${CYAN}"
+cat << "EOF"
+    __                        ____  _____
+   / /   ____ _____  __  __  / __ \/ ___/
+  / /   / __ `/_  / / / / / / / / /\__ \
+ / /___/ /_/ / / /_/ /_/ / / /_/ /___/ /
+/_____/\__,_/ /___/\__, /  \____//____/
+                  /____/
+EOF
+echo -e "${NC}"
+
+echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"
+echo -e "   Welcome to the ${CYAN}LazyOS${NC} installer"
+echo -e "   Arch Linux base · Hyprland · Clean by design"
+echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"
+echo ""
+echo -e "  This installer will:"
+echo -e "   ${CYAN}→${NC} Partition and format your disk"
+echo -e "   ${CYAN}→${NC} Install Arch Linux base system"
+echo -e "   ${CYAN}→${NC} Configure locale, timezone and users"
+echo -e "   ${CYAN}→${NC} Install Hyprland + LazyOS dotfiles"
+echo -e "   ${CYAN}→${NC} Set up the full Hypr ecosystem"
+echo ""
+echo -e "  ${YELLOW}  All data on the selected disk will be erased!${NC}"
+echo ""
+echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"
+echo ""
+
+# ── Checks ──────────────────────────────────────────────────
+[ "$EUID" -ne 0 ] && die "Run as root from the Arch ISO: bash install.sh"
+
+printf "  Checking UEFI mode...    "
+[ -d /sys/firmware/efi/efivars ] && echo -e "${GREEN}ok${NC}" || die "Not in UEFI mode! Check your BIOS settings."
+
+printf "  Checking internet...     "
+ping -c 1 archlinux.org &>/dev/null && echo -e "${GREEN}ok${NC}" || die "No internet connection!"
+
+printf "  Checking disk space...   "
+DISK_COUNT=$(lsblk -d -o NAME,TYPE | grep disk | wc -l)
+[ "$DISK_COUNT" -gt 0 ] && echo -e "${GREEN}ok${NC}" || die "No disks found!"
+
+echo ""

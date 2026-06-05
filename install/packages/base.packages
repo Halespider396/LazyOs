@@ -1,0 +1,79 @@
+# ── Hyprland + ecosystem ───────────────────────────────────────
+hyprland
+hyprpaper
+hypridle
+hyprlock
+hyprpicker
+hyprsunset
+hyprpolkitagent
+
+# ── Wayland essentials ─────────────────────────────────────────
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt5-wayland
+qt6-wayland
+
+# ── Bar, launcher, notifications ──────────────────────────────
+waybar
+wofi
+swaync
+
+# ── Terminal + shell ───────────────────────────────────────────
+alacritty
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+
+# ── Audio ──────────────────────────────────────────────────────
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+pavucontrol
+
+# ── Bluetooth ──────────────────────────────────────────────────
+bluez
+bluez-utils
+blueman
+
+# ── Network ────────────────────────────────────────────────────
+networkmanager
+network-manager-applet
+
+# ── Input ──────────────────────────────────────────────────────
+libinput
+
+# ── Display manager ────────────────────────────────────────────
+greetd
+
+# ── File manager ───────────────────────────────────────────────
+thunar
+
+# ── Browser ────────────────────────────────────────────────────
+firefox
+
+# ── Clipboard ──────────────────────────────────────────────────
+wl-clipboard
+cliphist
+
+# ── Utilities ──────────────────────────────────────────────────
+brightnessctl
+wlogout
+hyprshot
+git
+curl
+wget
+sudo
+bat
+neovim
+btop
+fastfetch
+
+# ── Theming ────────────────────────────────────────────────────
+nwg-look
+materia-gtk-theme
+papirus-icon-theme
+bibata-cursor-theme
+ttf-jetbrains-mono-nerd
+pacman-contrib
