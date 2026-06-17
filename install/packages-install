@@ -7,7 +7,7 @@ set -euo pipefail
 BUILD_USER="${USERNAME}"
 
 # ── Base packages ─────────────────────────────────────────────────────────
-pacman -S --noconfirm --needed \$(cat /tmp/lazyos-base.packages) || exit 1
+pacman -S --noconfirm --needed \$(cat /root/lazyos-base.packages) || exit 1
 
 # ── yay (AUR helper) ──────────────────────────────────────────────────────
 BUILD_DIR="/tmp/yay-build"
@@ -20,11 +20,12 @@ rm -rf "\$BUILD_DIR"
 command -v yay &>/dev/null || { echo "yay not found!"; exit 1; }
 
 # ── AUR packages ──────────────────────────────────────────────────────────
-sudo -u "\$BUILD_USER" yay -S --noconfirm --needed \$(cat /tmp/lazyos-aur.packages)
+sudo -u "\$BUILD_USER" yay -S --noconfirm --needed \$(cat /root/lazyos-aur.packages)
 
 # ── Enable services (only after all packages are installed) ───────────────
 systemctl enable greetd.service
 systemctl enable bluetooth.service
+systemctl enable pipewire.service
 
 echo "Packages installed."
 CHROOT
