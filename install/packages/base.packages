@@ -6,6 +6,7 @@ hyprlock
 hyprpicker
 hyprsunset
 hyprpolkitagent
+hyprcursor
 
 # ── Wayland essentials ─────────────────────────────────────────
 xdg-desktop-portal-hyprland
@@ -46,6 +47,7 @@ libinput
 
 # ── Display manager ────────────────────────────────────────────
 greetd
+greetd-tuigreet
 
 # ── File manager ───────────────────────────────────────────────
 thunar
@@ -59,7 +61,6 @@ cliphist
 
 # ── Utilities ──────────────────────────────────────────────────
 brightnessctl
-wlogout
 hyprshot
 git
 curl
@@ -74,6 +75,5 @@ fastfetch
 nwg-look
 materia-gtk-theme
 papirus-icon-theme
-bibata-cursor-theme
 ttf-jetbrains-mono-nerd
 pacman-contrib
