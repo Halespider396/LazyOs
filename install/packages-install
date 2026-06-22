@@ -25,7 +25,9 @@ sudo -u "\$BUILD_USER" yay -S --noconfirm --needed \$(cat /root/lazyos-aur.packa
 # ── Enable services (only after all packages are installed) ───────────────
 systemctl enable greetd.service
 systemctl enable bluetooth.service
-systemctl enable pipewire.service
+
+# pipewire is a user service (socket-activated), not a system unit
+sudo -u "\$BUILD_USER" XDG_RUNTIME_DIR="/run/user/\$(id -u \$BUILD_USER)" systemctl --user enable pipewire.service pipewire-pulse.service wireplumber.service 2>/dev/null || true
 
 echo "Packages installed."
 CHROOT
