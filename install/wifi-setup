@@ -1,0 +1,108 @@
+#!/bin/bash
+# ═══════════════════════════════════════════════════════════════════════════
+# LazyOS Installer — Wifi setup (runs before preflight)
+# Skips itself automatically if already online (e.g. ethernet).
+# ═══════════════════════════════════════════════════════════════════════════
+
+clear
+echo -e "${CYAN}"
+cat << "EOF"
+    __                        ____  _____
+   / /   ____ _____  __  __  / __ \/ ___/
+  / /   / __ `/_  / / / / / / / / /\__ \
+ / /___/ /_/ / / /_/ /_/ / / /_/ /___/ /
+/_____/\__,_/ /___/\__, /  \____//____/
+                  /____/
+EOF
+echo -e "${NC}"
+echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"
+echo -e "   Network setup"
+echo -e "${CYAN}  ══════════════════════════════════════════════════${NC}"
+echo ""
+
+# ── Already online? (ethernet, or wifi pre-connected) ──────────────────────
+printf "  Checking existing connection...   "
+if ping -c 1 -W 3 archlinux.org &>/dev/null; then
+    echo -e "${GREEN}ok${NC}"
+    echo ""
+    info "Already online — skipping wifi setup."
+    echo ""
+    sleep 1
+    return 0 2>/dev/null || exit 0
+fi
+echo -e "${YELLOW}not connected${NC}"
+echo ""
+
+# ── Find a wifi device ───────────────────────────────────────────────────────
+WIFI_DEV=$(iwctl device list 2>/dev/null | awk '/wlan|wlp/ {print $2; exit}')
+
+if [ -z "$WIFI_DEV" ]; then
+    die "No wifi device found. Plug in ethernet, or run 'iwctl' manually, then re-run install.sh."
+fi
+
+ok "Found wifi device: $WIFI_DEV"
+echo ""
+
+# ── Scan ─────────────────────────────────────────────────────────────────────
+info "Scanning for networks..."
+iwctl station "$WIFI_DEV" scan &>/dev/null
+sleep 3
+
+mapfile -t NETWORKS < <(iwctl station "$WIFI_DEV" get-networks 2>/dev/null \
+    | tail -n +5 \
+    | sed -E 's/^\s*\*?\s*//' \
+    | awk 'NF {$NF=""; $(NF-1)=""; print}' \
+    | sed -E 's/\s+$//' \
+    | grep -v '^\s*$' || true)
+
+if [ "${#NETWORKS[@]}" -eq 0 ]; then
+    die "No networks found. Move closer to your router and re-run install.sh."
+fi
+
+echo ""
+echo -e "  ${CYAN}Available networks:${NC}"
+for i in "${!NETWORKS[@]}"; do
+    printf "   %2d) %s\n" "$((i+1))" "${NETWORKS[$i]}"
+done
+echo ""
+
+# ── Pick a network ───────────────────────────────────────────────────────────
+SSID=""
+while [ -z "$SSID" ]; do
+    read -rp "  Select network number: " CHOICE
+    if [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le "${#NETWORKS[@]}" ]; then
+        SSID="${NETWORKS[$((CHOICE-1))]}"
+    else
+        echo -e "  ${YELLOW}Invalid choice, try again.${NC}"
+    fi
+done
+
+ok "Selected: $SSID"
+echo ""
+
+# ── Connect ──────────────────────────────────────────────────────────────────
+read -rsp "  Password for \"$SSID\" (leave empty if open network): " WIFI_PASS
+echo ""
+echo ""
+
+info "Connecting..."
+if [ -z "$WIFI_PASS" ]; then
+    iwctl station "$WIFI_DEV" connect "$SSID"
+else
+    iwctl --passphrase "$WIFI_PASS" station "$WIFI_DEV" connect "$SSID"
+fi
+
+sleep 3
+
+# ── Confirm we're online ─────────────────────────────────────────────────────
+printf "  Verifying connection...   "
+RETRIES=0
+until ping -c 1 -W 3 archlinux.org &>/dev/null; do
+    RETRIES=$((RETRIES+1))
+    [ "$RETRIES" -ge 5 ] && die "Could not get online. Check the password and try again (re-run install.sh)."
+    sleep 2
+done
+echo -e "${GREEN}ok${NC}"
+echo ""
+ok "Connected to $SSID"
+sleep 1

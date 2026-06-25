@@ -1,0 +1,9 @@
+# Force LF line endings for all shell/install scripts, regardless of OS
+# or editor settings. Prevents the SC1017 "Literal carriage return" issue
+# that happens when editing on Windows.
+
+* text=auto eol=lf
+
+*.sh text eol=lf
+install/* text eol=lf
+*.packages text eol=lf
