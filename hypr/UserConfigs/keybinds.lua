@@ -87,6 +87,12 @@ bind = {
 
   -- ── Exit ───────────────────────────────────────────────────
   { MOD.."SHIFT", "E", "exec", "wlogout" },
+
+  -- ── Hypr ecosystem extras ──────────────────────────────────
+  -- Color picker (copies to clipboard)
+  { MOD, "C", "exec", "hyprpicker -a" },
+  -- Hyprshade toggle
+  { MOD, "S", "exec", "hyprshade toggle blue-light-filter" },
 }
 
 -- Mouse binds
@@ -94,9 +100,3 @@ bindm = {
   { MOD, "mouse:272", "movewindow" },
   { MOD, "mouse:273", "resizewindow" },
 }
-
--- ── Hypr ecosystem extras ──────────────────────────────────
--- Color picker (copies to clipboard)
-  { MOD, "C", "exec", "hyprpicker -a" },
--- Hyprshade toggle
-  { MOD, "S", "exec", "hyprshade toggle blue-light-filter" },
