@@ -22,3 +22,25 @@ echo -e "  Intel  → sudo lazy -S mesa vulkan-intel"
 echo -e "  NVIDIA → you know what you did 😉"
 echo -e "           wiki.archlinux.org/title/NVIDIA"
 echo ""
+
+# ── Auto-reboot countdown (press any key to cancel) ────────────────────────
+echo -e "${CYAN}  Rebooting in:${NC}"
+CANCELLED=0
+for i in 10 9 8 7 6 5 4 3 2 1; do
+    printf "\r  %2ds — press any key to cancel  " "$i"
+    if read -t 1 -n 1 -s; then
+        CANCELLED=1
+        break
+    fi
+done
+echo ""
+
+if [ "$CANCELLED" -eq 1 ]; then
+    echo ""
+    info "Reboot cancelled. Run 'reboot' manually when you're ready."
+else
+    echo ""
+    ok "Rebooting now..."
+    sleep 1
+    reboot
+fi
