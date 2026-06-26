@@ -10,6 +10,7 @@ INSTALL_DIR="$(cd "$(dirname "$0")/install" && pwd)"
 source "$INSTALL_DIR/helpers"
 
 # ── Run each stage in order ────────────────────────────────────────────────
+source "$INSTALL_DIR/wifi-setup"
 source "$INSTALL_DIR/preflight"
 source "$INSTALL_DIR/user-input"
 source "$INSTALL_DIR/disk-setup"
