@@ -2,23 +2,21 @@
 -- Animations — clean and snappy, not overdone
 -- ══════════════════════════════════════════════════════════════
 
-animations = {
-  enabled = true,
+hl.config({
+	animations={enabled=true},
+})
 
-  bezier = {
-    { "easeOut",     0.16, 1,    0.3,  1    },
-    { "easeIn",      0.7,  0,    0.84, 0    },
-    { "easeInOut",   0.87, 0,    0.13, 1    },
-    { "snappy",      0.25, 0.46, 0.45, 0.94 },
-  },
+--Bezier curves
+hl.curve("easeOut", {type="bezier",points={{0.16,1}, {0.3,1} }})
+hl.curve("easeIn", {type="bezier",points={{0.7,0}, {0.84,0} }})
+hl.curve("easeInOut", {type="bezier",points={{0.87,0}, {0.13,1} }})
+hl.curve("snappy", {type="bezier",points={{0.25,0.46},{0.45,0.94} }})
 
-  animation = {
-    { "windows",     true, 3,  "easeOut",   "slide"  },
-    { "windowsOut",  true, 2,  "easeIn",    "slide"  },
-    { "border",      true, 5,  "easeInOut"           },
-    { "borderangle", true, 8,  "easeInOut"           },
-    { "fade",        true, 4,  "easeInOut"           },
-    { "workspaces",  true, 4,  "snappy",    "slide"  },
-    { "layers",      true, 3,  "easeOut",   "fade"   },
-  },
-}
+--Animation rules
+hl.animation({leaf="windows",enabled=true,speed=3,bezier="easeOut", style="slide"})
+hl.animation({leaf="windowsOut",enabled=true,speed=2,bezier="easeIn", style="slide"})
+hl.animation({leaf="border",enabled=true,speed=5,bezier="easeInOut"})
+hl.animation({leaf="borderangle",enabled=true,speed=8,bezier="easeInOut"})
+hl.animation({leaf="fade",enabled=true,speed=4,bezier="easeInOut"})
+hl.animation({leaf="workspaces",enabled=true,speed=4,bezier="snappy", style="slide"})
+hl.animation({leaf="layers",enabled=true,speed=3,bezier="easeOut", style="fade"})
